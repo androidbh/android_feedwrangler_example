@@ -3,6 +3,8 @@ package org.androidbh.podcast;
 import android.app.Application;
 import android.support.v4.util.Pair;
 
+import com.facebook.stetho.Stetho;
+
 import org.androidbh.podcast.api.RestAdpter;
 
 import java.io.IOException;
@@ -21,6 +23,9 @@ public class PodcastApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Stetho.initializeWithDefaults(this);
+
         initRetrofit();
     }
 

@@ -11,7 +11,7 @@ import java.util.List;
 public class ResponseApi<T> {
 
     private int count;
-    @SerializedName("items")
+    @SerializedName("podcasts")
     private List<T> items;
     private String error;
     private String result;

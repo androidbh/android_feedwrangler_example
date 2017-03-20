@@ -1,6 +1,7 @@
 package org.androidbh.podcast.api;
 
 import org.androidbh.podcast.entity.Category;
+import org.androidbh.podcast.entity.Podcast;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,5 +17,5 @@ public interface FeedWranglerApi {
     Call<ResponseApi<Category>> getCategories();
 
     @GET("api/v2/podcasts/category/{id}")
-    Call<ResponseApi<Category>>getCategory(@Path("id") int id);
+    Call<ResponseApi<Podcast>>getCategory(@Path("id") int id);
 }
