@@ -1,7 +1,5 @@
 package org.androidbh.podcast;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -11,43 +9,44 @@ import android.view.ViewGroup;
 
 import com.squareup.picasso.Picasso;
 
-import org.androidbh.podcast.entity.Category;
+import org.androidbh.podcast.entity.Podcast;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by felipearimateia on 20/03/17.
  */
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder>{
+public class PodcastAdapter extends RecyclerView.Adapter<PodcastAdapter.ViewHolder>{
 
-    public List<Category> items;
+    public List<Podcast> items;
 
-    public CategoryAdapter(List<Category> items) {
+    public PodcastAdapter(List<Podcast> items) {
         this.items = items;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_category, parent, false);
+                .inflate(R.layout.item_podcast, parent, false);
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Category category = items.get(position);
-        holder.titleCategory.setText(category.getTitle());
+        Podcast podcast =  items.get(position);
+        holder.textView.setText(podcast.getTitle());
 
         Picasso.with(holder.itemView.getContext())
-                .load(category.getImageUrl())
+                .load(podcast.getImageUrl())
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder)
-                .into(holder.imageCategory);
+                .into(holder.imageView);
+
     }
 
     @Override
@@ -57,25 +56,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.category_image)
-        AppCompatImageView imageCategory;
+        @BindView(R.id.podcast_image)
+        AppCompatImageView imageView;
 
-        @BindView(R.id.category_title)
-        AppCompatTextView titleCategory;
+        @BindView(R.id.podcast_title)
+        AppCompatTextView textView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-        }
-
-        @OnClick(R.id.content)
-        public void onClickItem(View view) {
-            Category category = items.get(getAdapterPosition());
-            Context context = view.getContext();
-
-            Intent intent = new Intent(context, CategoryActivity.class);
-            intent.putExtra("category", category);
-            context.startActivity(intent);
         }
     }
 }

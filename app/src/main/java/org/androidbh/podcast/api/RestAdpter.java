@@ -19,6 +19,10 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Created by felipearimateia on 20/03/17.
+ */
+
 public class RestAdpter {
 
     private static Retrofit retrofit;
