@@ -24,7 +24,9 @@ public class PodcastApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Stetho.initializeWithDefaults(this);
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this);
+        }
 
         initRetrofit();
     }

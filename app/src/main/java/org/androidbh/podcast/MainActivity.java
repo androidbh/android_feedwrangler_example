@@ -1,5 +1,6 @@
 package org.androidbh.podcast;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -7,10 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import org.androidbh.podcast.api.ErrorUtils;
 import org.androidbh.podcast.api.FeedWranglerApi;
 import org.androidbh.podcast.api.ResponseApi;
 import org.androidbh.podcast.api.RestAdpter;
@@ -20,11 +24,14 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.list_items)
     RecyclerView recyclerView;
@@ -62,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        if (call != null && (!call.isCanceled() || !call.isExecuted())) {
+        if (call != null) {
             call.cancel();
         }
     }
@@ -89,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @OnClick(R.id.fab)
+    public void openSearhc(View view) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+    }
+
     private void loadCategories() {
 
         FeedWranglerApi api = RestAdpter.getApi(FeedWranglerApi.class);
@@ -103,12 +116,22 @@ public class MainActivity extends AppCompatActivity {
                     adapter.items.addAll(responseApi.getItems());
                     adapter.notifyDataSetChanged();
                 }
+                else {
+                    ResponseApi responseApi = ErrorUtils.parseError(response);
+                    showMessage(responseApi.getError());
+                }
             }
 
             @Override
             public void onFailure(Call<ResponseApi<Category>> call, Throwable t) {
-
+                if (call.isCanceled()) {
+                    Log.d(TAG,"requisição cancelada" );
+                }
             }
         });
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

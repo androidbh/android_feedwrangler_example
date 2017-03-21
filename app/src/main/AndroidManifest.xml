@@ -26,7 +26,16 @@
         <activity
             android:name=".CategoryActivity"
             android:label="@string/title_activity_category"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.androidbh.podcast.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/title_activity_search"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

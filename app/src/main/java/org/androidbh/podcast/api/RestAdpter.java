@@ -55,6 +55,7 @@ public class RestAdpter {
         private int cacheSize;
         private int timeOut;
         private List<Interceptor> interceptors;
+        private List<Interceptor> networkInterceptors;
 
         public Builder setProtocol(@NonNull  String protocol) {
             this.protocol = protocol;
@@ -106,6 +107,11 @@ public class RestAdpter {
             return this;
         }
 
+        public Builder setNetworkInterceptors(List<Interceptor> networkInterceptors) {
+            this.networkInterceptors = networkInterceptors;
+            return this;
+        }
+
         public void build() {
             RestAdpter.init(this);
         }
@@ -124,7 +130,7 @@ public class RestAdpter {
         OkHttpClient.Builder okBuilder = new OkHttpClient.Builder();
 
         if (builder.debug) {
-            okBuilder.addInterceptor(new StethoInterceptor());
+            okBuilder.addNetworkInterceptor(new StethoInterceptor());
         }
 
         if (builder.pins != null && builder.pins.length > 0) {
@@ -149,9 +155,11 @@ public class RestAdpter {
         }
 
         if (builder.interceptors != null && builder.interceptors.size() > 0) {
-            for (Interceptor interceptor : builder.interceptors) {
-                okBuilder.addInterceptor(interceptor);
-            }
+            builder.interceptors.forEach(okBuilder::addInterceptor);
+        }
+
+        if (builder.networkInterceptors != null && builder.networkInterceptors.size() > 0) {
+            builder.networkInterceptors.forEach(okBuilder::addNetworkInterceptor);
         }
 
         return okBuilder.build();
